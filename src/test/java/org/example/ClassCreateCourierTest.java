@@ -20,14 +20,14 @@ public class ClassCreateCourierTest {
 
     @Test
     public void createNewCourierAndCheckResponse(){
-        Card card = new Card("ninjacourier" + new Random().nextInt(100),
+        Courier courier = new Courier("ninjacourier" + new Random().nextInt(100),
                 "1234", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
                         .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(card)
+                        .body(courier)
                         .when()
                         .post("/api/v1/courier");
         response.then().assertThat().body("ok", equalTo(true))
