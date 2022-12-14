@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
@@ -25,7 +24,6 @@ public class ClassCreateCourierTest {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
                         .body(courier)
                         .when()
@@ -37,13 +35,13 @@ public class ClassCreateCourierTest {
 
     @Test
     public void createNewCourierWithRepeatedLogin() {
-        File json = new File("src/test/resources/newCourier.json");
+        Courier courier = new Courier("ninja",
+                "1234", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(courier)
                         .when()
                         .post("/api/v1/courier");
         response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
@@ -53,13 +51,13 @@ public class ClassCreateCourierTest {
 
     @Test
     public void createNewCourierWhenNotLogin(){
-        File json = new File("src/test/resources/notLogin.json");
+        Courier courier = new Courier("",
+                "1234", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(courier)
                         .when()
                         .post("/api/v1/courier");
         response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
@@ -69,13 +67,13 @@ public class ClassCreateCourierTest {
 
     @Test
     public void createNewCourierWhenNotPassword(){
-        File json = new File("src/test/resources/notLogin.json");
+        Courier courier = new Courier("ninja",
+                "", "saske");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(courier)
                         .when()
                         .post("/api/v1/courier");
         response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))

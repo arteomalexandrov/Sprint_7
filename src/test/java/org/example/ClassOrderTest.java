@@ -19,7 +19,6 @@ public class ClassOrderTest {
     public void getListOrdersAndCheckResponse() {
         Response response =
                 given()
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .get("/api/v1/orders");
         response.then().assertThat().body("orders", notNullValue())
                 .and()

@@ -5,8 +5,6 @@ import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -19,13 +17,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierAndCheckResponse(){
-        File json = new File("src/test/resources/loginCourier.json");
+        Auth auth = new Auth("1122ninja",
+                "1234");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("id", notNullValue())
@@ -35,13 +33,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierWhenNotLogin(){
-        File json = new File("src/test/resources/authNotLogin.json");
+        Auth auth = new Auth("",
+                "1234");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("message", equalTo("Недостаточно данных для входа"))
@@ -51,13 +49,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierWhenNotPassword(){
-        File json = new File("src/test/resources/authNotPassword.json");
+        Auth auth = new Auth("ninja",
+                "");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("message", equalTo("Недостаточно данных для входа"))
@@ -67,13 +65,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierWhenNotLoginAndNotPassword(){
-        File json = new File("src/test/resources/authNotLoginAndNotPassword.json");
+        Auth auth = new Auth("",
+                "");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("message", equalTo("Недостаточно данных для входа"))
@@ -83,13 +81,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierWhenIncorrectLogin(){
-        File json = new File("src/test/resources/authIncorrectLogin.json");
+        Auth auth = new Auth("fhgfjdfhh",
+                "1234");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))
@@ -99,13 +97,13 @@ public class ClassAuthCourierTest {
 
     @Test
     public void authCourierWhenIncorrectPassword(){
-        File json = new File("src/test/resources/authIncorrectPassword.json");
+        Auth auth = new Auth("ninja",
+                "4321");
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
-                        .body(json)
+                        .body(auth)
                         .when()
                         .post("/api/v1/courier/login");
         response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))

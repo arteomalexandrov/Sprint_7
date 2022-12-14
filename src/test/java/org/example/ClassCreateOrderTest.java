@@ -23,7 +23,6 @@ public class ClassCreateOrderTest {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
                         .body(json)
                         .when()
@@ -39,7 +38,6 @@ public class ClassCreateOrderTest {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
                         .body(json)
                         .when()
@@ -55,7 +53,6 @@ public class ClassCreateOrderTest {
         Response response =
                 given()
                         .header("Content-type", "application/json")
-                        .auth().oauth2("подставь_сюда_свой_токен")
                         .and()
                         .body(json)
                         .when()
