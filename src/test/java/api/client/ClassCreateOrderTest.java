@@ -1,13 +1,11 @@
-package org.example;
+package api.client;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class ClassCreateOrderTest {
@@ -18,48 +16,30 @@ public class ClassCreateOrderTest {
     }
 
     @Test
-    public void createNewOrderAndCheckResponse(){
-        File json = new File("src/test/resources/newOrder.json");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
-                        .post("/api/v1/orders");
-        response.then().assertThat().body("track", notNullValue())
-                .and()
-                .statusCode(201);
+    @DisplayName("Check response for create new order")
+    public void testCreateNewOrderAndCheckResponse(){
+        OrdersClient ordersClient = new OrdersClient();
+        Response createOrderResponse = ordersClient.createNewOrderAndCheckResponse();
+        createOrderResponse.then().statusCode(201).and()
+                .assertThat().body("track", notNullValue());
     }
 
     @Test
-    public void createNewOrderBlackAndGray(){
-        File json = new File("src/test/resources/newOrderBlackAndGray.json");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
-                        .post("/api/v1/orders");
-        response.then().assertThat().body("track", notNullValue())
-                .and()
-                .statusCode(201);
+    @DisplayName("Check response for create new order black and gray")
+    public void testCreateNewOrderBlackAndGray(){
+        OrdersClient ordersClient = new OrdersClient();
+        Response createOrderBlackAndGrayResponse = ordersClient.createNewOrderBlackAndGray();
+        createOrderBlackAndGrayResponse.then().statusCode(201).and()
+                .assertThat().body("track", notNullValue());
     }
 
     @Test
-    public void createNewOrderNotColors(){
-        File json = new File("src/test/resources/newOrderNotColors.json");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(json)
-                        .when()
-                        .post("/api/v1/orders");
-        response.then().assertThat().body("track", notNullValue())
-                .and()
-                .statusCode(201);
+    @DisplayName("Check response for create new order not colors")
+    public void testCreateNewOrderNotColors(){
+        OrdersClient ordersClient = new OrdersClient();
+        Response createOrderNotColorsResponse = ordersClient.createNewOrderNotColors();
+        createOrderNotColorsResponse.then().statusCode(201).and()
+                .assertThat().body("track", notNullValue());
     }
 
 }

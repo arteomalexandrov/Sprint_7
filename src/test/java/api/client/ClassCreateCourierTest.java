@@ -1,5 +1,6 @@
-package org.example;
+package api.client;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import java.util.Random;
 
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class ClassCreateCourierTest {
@@ -18,67 +18,44 @@ public class ClassCreateCourierTest {
     }
 
     @Test
-    public void createNewCourierAndCheckResponse(){
-        Courier courier = new Courier("ninjacourier" + new Random().nextInt(100),
-                "1234", "saske");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("ok", equalTo(true))
-                .and()
-                .statusCode(201);
+    @DisplayName("Check response for create new courier")
+    public void testCheckResponseForCreateCourier(){
+        CourierClient courierClient = new CourierClient();
+        Response createCourierResponse = courierClient.checkResponseForCreateCourier(new
+                Courier("ninjacourier" + new Random().nextInt(100),
+                "1234", "saske"));
+        createCourierResponse.then().statusCode(201).and()
+                .assertThat().body("ok", equalTo(true));
     }
 
     @Test
-    public void createNewCourierWithRepeatedLogin() {
-        Courier courier = new Courier("ninja",
-                "1234", "saske");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
-                .and()
-                .statusCode(409);
+    @DisplayName("Check response for create new courier with repeated login")
+    public void testCreateNewCourierWithRepeatedLogin(){
+        CourierClient courierClient = new CourierClient();
+        Response createCourierWithRepeatLoginResponse = courierClient.createNewCourierWithRepeatedLogin(new
+                Courier("ninja", "1234", "saske"));
+        createCourierWithRepeatLoginResponse.then().statusCode(409).and()
+                .assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."));
     }
 
     @Test
-    public void createNewCourierWhenNotLogin(){
-        Courier courier = new Courier("",
-                "1234", "saske");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
-                .and()
-                .statusCode(400);
+    @DisplayName("Check response for create new courier when not login")
+    public void testCreateNewCourierWhenNotLogin(){
+        CourierClient courierClient = new CourierClient();
+        Response createCourierNotLoginResponse = courierClient.createNewCourierWhenNotLogin(new
+                Courier("", "1234", "saske"));
+        createCourierNotLoginResponse.then().statusCode(400).and()
+                .assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
     @Test
-    public void createNewCourierWhenNotPassword(){
-        Courier courier = new Courier("ninja",
-                "", "saske");
-        Response response =
-                given()
-                        .header("Content-type", "application/json")
-                        .and()
-                        .body(courier)
-                        .when()
-                        .post("/api/v1/courier");
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"))
-                .and()
-                .statusCode(400);
+    @DisplayName("Check response for create new courier when not password")
+    public void testCreateNewCourierWhenNotPassword(){
+        CourierClient courierClient = new CourierClient();
+        Response createCourierNotPasswordResponse = courierClient.createNewCourierWhenNotPassword(new
+                Courier("ninja", "", "saske"));
+        createCourierNotPasswordResponse.then().statusCode(400).and()
+                .assertThat().body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
 
 }
