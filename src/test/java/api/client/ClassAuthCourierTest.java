@@ -1,5 +1,6 @@
 package org.example;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Before;
@@ -109,6 +110,62 @@ public class ClassAuthCourierTest {
         response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))
                 .and()
                 .statusCode(404);
+    }
+
+
+
+    @Test
+    @DisplayName("Check response code for login courier")
+    public void testCheckResponseForLoginCourier(){
+        CourierClient courierClient = new CourierClient();
+        Response loginCourierResponse = courierClient.loginCourierResponse(new
+                AuthCourier(currentCourier.login,"*** NotLogin ***"));
+        loginCourierResponse.statusCode(200).and.assertThat().body("id", notNullValue());
+    }
+
+    @Test
+    @DisplayName("Check error message for not login")
+    public void testErrorMessageForNotLogin(){
+        CourierClient courierClient = new CourierClient();
+        Response notLoginResponse = courierClient.notLoginResponse(new
+                AuthCourier(currentCourier.login,"*** NotLogin ***"));
+        notLoginResponse.statusCode(400).and.assertThat().body("message", is("Недостаточно данных для входа"));
+    }
+
+    @Test
+    @DisplayName("Check error message for not password")
+    public void testErrorMessageForNotPassword(){
+        CourierClient courierClient = new CourierClient();
+        Response notPasswordResponse = courierClient.notPasswordResponse(new
+                AuthCourier(currentCourier.login,"*** NotLogin ***"));
+        notPasswordResponse.statusCode(400).and.assertThat().body("message", is("Недостаточно данных для входа"));
+    }
+
+    @Test
+    @DisplayName("Check error message for not login and not password")
+    public void testErrorMessageForNotLoginAndNotPassword(){
+        CourierClient courierClient = new CourierClient();
+        Response notLoginAndNotPasswordResponse = courierClient.notLoginAndNotPasswordResponse(new
+                AuthCourier(currentCourier.login,"*** NotLoginAndNotPassword ***"));
+        notLoginAndNotPasswordResponse.statusCode(400).and.assertThat().body("message", is("Недостаточно данных для входа"));
+    }
+
+    @Test
+    @DisplayName("Check error message for incorrect login")
+    public void testErrorMessageForIncorrectLogin(){
+        CourierClient courierClient = new CourierClient();
+        Response incorrectLoginResponse = courierClient.getIncorrectLoginResponse(new
+                AuthCourier(currentCourier.login,"*** WrongLogin ***"));
+        incorrectLoginResponse.statusCode(404).and.assertThat().body("message", is("Учетная запись не найдена"));
+    }
+
+    @Test
+    @DisplayName("Check error message for incorrect password")
+    public void testErrorMessageForIncorrectPassword(){
+        CourierClient courierClient = new CourierClient();
+        Response incorrectPasswordResponse = courierClient.getIncorrectPasswordResponse(new
+                AuthCourier(currentCourier.login,"*** WrongPassword ***"));
+        incorrectPasswordResponse.statusCode(404).and.assertThat().body("message", is("Учетная запись не найдена"));
     }
 
 }
