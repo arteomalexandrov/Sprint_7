@@ -3,10 +3,12 @@ package api.client;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ClassCreateOrderTest {
 
@@ -17,7 +19,7 @@ public class ClassCreateOrderTest {
 
     @Test
     @DisplayName("Check response for create new order")
-    public void testCreateNewOrderAndCheckResponse(){
+    public void testCreateNewOrderAndCheckResponse() {
         OrdersClient ordersClient = new OrdersClient();
         Response createOrderResponse = ordersClient.createNewOrderAndCheckResponse();
         createOrderResponse.then().statusCode(201).and()
@@ -26,7 +28,7 @@ public class ClassCreateOrderTest {
 
     @Test
     @DisplayName("Check response for create new order black and gray")
-    public void testCreateNewOrderBlackAndGray(){
+    public void testCreateNewOrderBlackAndGray() {
         OrdersClient ordersClient = new OrdersClient();
         Response createOrderBlackAndGrayResponse = ordersClient.createNewOrderBlackAndGray();
         createOrderBlackAndGrayResponse.then().statusCode(201).and()
@@ -35,11 +37,10 @@ public class ClassCreateOrderTest {
 
     @Test
     @DisplayName("Check response for create new order not colors")
-    public void testCreateNewOrderNotColors(){
+    public void testCreateNewOrderNotColors() {
         OrdersClient ordersClient = new OrdersClient();
         Response createOrderNotColorsResponse = ordersClient.createNewOrderNotColors();
         createOrderNotColorsResponse.then().statusCode(201).and()
                 .assertThat().body("track", notNullValue());
     }
-
 }

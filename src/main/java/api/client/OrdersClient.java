@@ -1,12 +1,11 @@
 package api.client;
 
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
-import static io.restassured.RestAssured.given;
-
-import io.qameta.allure.Step;
-
 import java.io.File;
+
+import static io.restassured.RestAssured.given;
 
 public class OrdersClient {
 
@@ -41,5 +40,4 @@ public class OrdersClient {
         return given()
                 .get(orders);
     }
-
 }

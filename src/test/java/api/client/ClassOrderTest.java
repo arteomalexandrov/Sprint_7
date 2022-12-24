@@ -17,12 +17,11 @@ public class ClassOrderTest {
 
     @Test
     @DisplayName("Check response for get list orders")
-    public void testGetListOrdersAndCheckResponse(){
+    public void testGetListOrdersAndCheckResponse() {
         OrdersClient ordersClient = new OrdersClient();
         Response getListOrdersResponse = ordersClient.getListOrdersAndCheckResponse();
         getListOrdersResponse.then().statusCode(200).and()
                 .assertThat().body("orders", notNullValue());
         System.out.println(getListOrdersResponse.body().asString());
     }
-
 }

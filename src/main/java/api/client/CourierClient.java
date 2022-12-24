@@ -1,17 +1,15 @@
 package api.client;
 
-import io.restassured.RestAssured;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
-
-import io.qameta.allure.Step;
 
 public class CourierClient {
 
     private static final String loginCourier = "/api/v1/courier/login";
     private static final String createCourier = "/api/v1/courier";
+    private static final String deleteCourier = "/api/v1/courier/";
 
     @Step("Get response for incorrect password")
     public Response getIncorrectPasswordResponse(Object body) {
@@ -113,4 +111,10 @@ public class CourierClient {
                 .post(createCourier);
     }
 
+    @Step("delete courier")
+    public Response deleteCourier(String id) {
+        return given()
+                .header("Content-type", "application/json")
+                .delete(deleteCourier + id);
+    }
 }
